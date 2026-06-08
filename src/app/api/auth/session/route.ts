@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getFirebaseAdminAuth } from "@/lib/firebase-admin";
+import { verifyFirebaseIdToken } from "@/lib/firebase-auth-rest";
 import {
   AUTH_SESSION_COOKIE,
   AUTH_SESSION_MAX_AGE_SECONDS,
@@ -35,9 +35,11 @@ export async function POST(req: Request) {
   const idToken = typeof body?.idToken === "string" ? body.idToken : "";
   if (!idToken) return NextResponse.json({ error: "missing_id_token" }, { status: 400 });
 
-  const decoded = await getFirebaseAdminAuth().verifyIdToken(idToken);
-  const email = decoded.email?.toLowerCase() || "";
-  const verified = decoded.email_verified === true;
+  const decoded = await verifyFirebaseIdToken(idToken);
+  if (!decoded) return NextResponse.json({ error: "invalid_id_token" }, { status: 401 });
+
+  const email = decoded.email;
+  const verified = decoded.emailVerified;
   const domain = email.split("@")[1] || "";
 
   const emailAllowed = ALLOWED_EMAILS.includes(email);
@@ -50,15 +52,15 @@ export async function POST(req: Request) {
   const token = await createAuthSessionToken({
     uid: decoded.uid,
     email,
-    name: decoded.name || null,
-    picture: decoded.picture || null,
+    name: decoded.name,
+    picture: decoded.picture,
   });
 
   const res = NextResponse.json({
     user: {
       email,
-      name: decoded.name || null,
-      image: decoded.picture || null,
+      name: decoded.name,
+      image: decoded.picture,
     },
   });
   res.cookies.set(AUTH_SESSION_COOKIE, token, {
