@@ -498,8 +498,8 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
         </Section>
 
         <Section
-          title="Translations"
-          subtitle="Spanish copy for the widget. Visitors get a language toggle in the chat header."
+          title="Spanish language"
+          subtitle="Turn the Spanish language option on or off for this widget. When enabled, visitors see a language toggle in the chat header."
         >
           <label className="flex items-center gap-2">
             <input
@@ -508,7 +508,7 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
               onChange={(e) => set("enableTranslation", e.target.checked)}
               className="h-4 w-4 rounded border-ink-300"
             />
-            <span className="text-sm">Enable Spanish translation in the widget</span>
+            <span className="text-sm">Enable Spanish language toggle in the widget</span>
           </label>
           {form.enableTranslation && (
             <p className="mt-3 text-xs text-ink-500">
@@ -664,7 +664,7 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
 
         <Section
           title="Chat panel footer branding"
-          subtitle="Controls the small line at the very bottom of the chat panel (default: 'Powered by RJL-Chat'). Hide it entirely or replace it with your own copy."
+          subtitle="Controls the small line at the very bottom of the chat panel (default: 'Powered by Jobs to Close'). Hide it entirely or replace it with your own copy."
         >
           <label className="flex items-center gap-2">
             <input
@@ -678,11 +678,11 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
           {form.brandingFooterEnabled && (
             <Field
               label="Footer text"
-              help="Leave blank to keep the default 'Powered by RJL-Chat'. Set your own text to replace it."
+              help="Leave blank to keep the default 'Powered by Jobs to Close'. Set your own text to replace it."
             >
               <input
                 className="input"
-                placeholder="Powered by RJL-Chat"
+                placeholder="Powered by Jobs to Close"
                 value={form.brandingFooterText}
                 onChange={(e) => set("brandingFooterText", e.target.value)}
               />

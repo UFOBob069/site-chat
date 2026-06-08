@@ -1,4 +1,4 @@
-/* RJL-Chat embeddable widget.
+/* Jobs to Close embeddable widget.
    Loaded via: <script src="/widget.js" data-client-id="..." async></script>
    Everything lives in a Shadow DOM so host-site styles cannot leak in. */
 (function () {
@@ -20,7 +20,7 @@
 
   var clientId = currentScript.getAttribute("data-client-id");
   if (!clientId) {
-    console.warn("[RJL-Chat] Missing data-client-id attribute on script tag.");
+    console.warn("[Jobs to Close] Missing data-client-id attribute on script tag.");
     return;
   }
   var isPreviewMode =
@@ -439,8 +439,9 @@
     return wrap;
   }
 
-  function detectInitialLocale(translations) {
-    if (!translations || !translations.es) return "en";
+  function detectInitialLocale(widget) {
+    var translations = widget && widget.translations;
+    if (!widget || widget.enableTranslation === false || !translations || !translations.es) return "en";
     try {
       // 1. URL contains an "/es" path segment.
       var path = window.location.pathname || "";
@@ -470,7 +471,7 @@
     var panel = null;
     var sideStackHost = null;
     var secondWelcomeTimer = null;
-    var currentLocale = detectInitialLocale(config.widget && config.widget.translations);
+    var currentLocale = detectInitialLocale(config.widget);
     var currentStepInputState = null; // { step } so we can rerender on locale change
     var introCleared = false;
     var introBgEl = null;        // .intro-bg wrapper for background-mode video
@@ -1060,7 +1061,7 @@
       var w = config.widget || {};
       if (w.brandingFooterEnabled !== false) {
         var brandText = (w.brandingFooterText && String(w.brandingFooterText).trim())
-          || "Powered by RJL-Chat";
+          || "Powered by Jobs to Close";
         panel.appendChild(el("div", { className: "brand-foot" }, [brandText]));
       }
       root.appendChild(panel);
@@ -2099,7 +2100,7 @@
             send_to: id + "/" + label,
           });
         } catch (e) {
-          console.warn("[RJL-Chat] gtag conversion failed:", e);
+          console.warn("[Jobs to Close] gtag conversion failed:", e);
         }
       }
 
@@ -2130,7 +2131,7 @@
         ChatWidget(cfg);
       })
       .catch(function (err) {
-        console.warn("[RJL-Chat] Failed to load:", err);
+        console.warn("[Jobs to Close] Failed to load:", err);
       });
   }
 

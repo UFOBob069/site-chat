@@ -41,7 +41,7 @@ export default async function FeaturesPage({ params }: { params: { clientId: str
     <div className="space-y-6">
       <div>
         <h2 className="text-base font-semibold">Feature toggles</h2>
-        <p className="text-sm text-ink-500">Turn RJL-Chat behaviors on and off for this business.</p>
+        <p className="text-sm text-ink-500">Turn Jobs to Close behaviors on and off for this business.</p>
       </div>
       <FeaturesForm
         clientId={params.clientId}

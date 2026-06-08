@@ -71,7 +71,7 @@ async function sendEmail(to: string, lead: Lead, summary: string, businessName: 
       },
       body: JSON.stringify({
         personalizations: [{ to: [{ email: to }] }],
-        from: { email: from, name: "RJL-Chat" },
+        from: { email: from, name: "Jobs to Close" },
         subject: `New lead for ${businessName}`,
         content: [{ type: "text/plain", value: text }],
       }),

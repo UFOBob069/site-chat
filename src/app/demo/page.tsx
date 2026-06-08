@@ -34,7 +34,7 @@ export default async function DemoPage({
       <p className="pill">Widget preview</p>
       <h1 className="text-3xl font-semibold">This page simulates a customer website</h1>
       <p className="text-ink-700">
-        The RJL-Chat widget has been injected in the corner of this page. Click the chat bubble
+        The Jobs to Close widget has been injected in the corner of this page. Click the chat bubble
         to walk through the flow as a visitor would. Submissions land in the admin&apos;s leads
         dashboard.
       </p>

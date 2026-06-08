@@ -18,9 +18,9 @@ export default async function AdminShellLayout({ children }: { children: React.R
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-ink-300/60 bg-white md:flex">
         <div className="flex h-16 items-center gap-2 border-b border-ink-300/60 px-5 font-semibold">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500 text-white">
-            RJ
+            JC
           </span>
-          <span>RJL-Chat</span>
+          <span>Jobs to Close</span>
         </div>
         <div className="flex-1 overflow-y-auto">
           <AdminSidebar

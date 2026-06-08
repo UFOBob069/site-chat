@@ -1,6 +1,6 @@
-# RJL-Chat
+# Jobs to Close
 
-Multi-tenant embeddable chat intake widget + admin built for Ramos James Law and any
+Multi-tenant embeddable chat intake widget + admin built for Jobs to Close and any
 additional businesses managed from the same dashboard.
 
 **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Prisma · PostgreSQL · Firebase Auth · Zod.
@@ -31,7 +31,7 @@ Railway-ready.
   - `GET|POST /api/admin/clients`
   - `PUT /api/admin/clients/:id/{settings,features,flow,notifications}`
 - **Prisma schema** in `prisma/schema.prisma` with an initial SQL migration.
-- **Seed** in `prisma/seed.ts` creates **Ramos James Law** and **Trucking Chicas**.
+- **Seed** in `prisma/seed.ts` creates starter businesses you can edit or replace.
 
 The schema is multi-tenant by row (`clientId` on every table); the admin UI is protected
 by Firebase Google sign-in and allowlisted admin emails.
@@ -53,7 +53,7 @@ npm run dev
 Then visit:
 
 - `http://localhost:3000` → redirects to `/admin`
-- `http://localhost:3000/admin` — pick Ramos James Law or Trucking Chicas
+- `http://localhost:3000/admin` — pick an existing business
 - `http://localhost:3000/admin/new` — add another business
 - `http://localhost:3000/demo?clientId=ramos-james-law` — test the widget
 
@@ -65,7 +65,7 @@ The Install screen for a business renders something like:
 
 ```html
 <script
-  src="https://YOUR-RJL-CHAT-DOMAIN/widget.js"
+  src="https://YOUR-JOBS TO CLOSE-DOMAIN/widget.js"
   data-client-id="ramos-james-law"
   async>
 </script>

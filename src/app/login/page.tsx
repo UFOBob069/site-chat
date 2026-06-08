@@ -58,9 +58,9 @@ function LoginInner() {
       <div className="w-full max-w-sm rounded-xl border border-ink-300/60 bg-white p-8 shadow-sm">
         <div className="mb-6 flex items-center gap-2">
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-base font-semibold text-white">
-            RJ
+            JC
           </span>
-          <span className="text-base font-semibold">RJL-Chat admin</span>
+          <span className="text-base font-semibold">Jobs to Close admin</span>
         </div>
         <h1 className="text-lg font-semibold">Sign in</h1>
         <p className="mt-1 text-sm text-ink-500">

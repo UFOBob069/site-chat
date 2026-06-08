@@ -216,7 +216,7 @@ export default function NotificationsForm({
           >
             <input
               className="input"
-              placeholder="e.g. rjl-chat-leads"
+              placeholder="e.g. jobs-to-close-leads"
               value={form.callRailFormId}
               onChange={(e) => set("callRailFormId", e.target.value)}
             />

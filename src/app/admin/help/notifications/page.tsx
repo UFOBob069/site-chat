@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "RJL-Chat — Notifications setup guide",
+  title: "Jobs to Close — Notifications setup guide",
 };
 
 export default function NotificationsHelp() {
@@ -66,7 +66,7 @@ export default function NotificationsHelp() {
         </p>
         <Steps>
           <li>Open <a className="text-brand-600 hover:underline" href="https://api.slack.com/apps" target="_blank" rel="noreferrer">api.slack.com/apps</a> and click <strong>Create New App → From scratch</strong>.</li>
-          <li>Name the app (e.g. <em>RJL-Chat Leads</em>) and pick your workspace. Click <strong>Create App</strong>.</li>
+          <li>Name the app (e.g. <em>Jobs to Close Leads</em>) and pick your workspace. Click <strong>Create App</strong>.</li>
           <li>In the left nav, open <strong>Incoming Webhooks</strong> and toggle <strong>Activate Incoming Webhooks</strong> to On.</li>
           <li>Scroll down and click <strong>Add New Webhook to Workspace</strong>.</li>
           <li>Pick the channel for lead notifications (e.g. <code className="rounded bg-ink-100 px-1">#leads</code>) and click <strong>Allow</strong>.</li>
@@ -81,7 +81,7 @@ export default function NotificationsHelp() {
       <Section id="crm" title="CRM webhook">
         <p>
           Any CRM that accepts inbound webhooks (HubSpot Workflows, Pipedrive, Salesforce
-          Flow, Zapier Catch Hook, Make.com, n8n) can ingest leads from RJL-Chat. We post a
+          Flow, Zapier Catch Hook, Make.com, n8n) can ingest leads from Jobs to Close. We post a
           JSON body with the full lead record and a one-line summary.
         </p>
         <Steps>
@@ -164,12 +164,12 @@ export default function NotificationsHelp() {
         <p className="mt-3 font-semibold">API key:</p>
         <Steps>
           <li>In CallRail, go to <strong>Settings → Integrations → API Keys</strong>.</li>
-          <li>Click <strong>Create API Key</strong>. Name it <em>RJL-Chat</em> or similar.</li>
+          <li>Click <strong>Create API Key</strong>. Name it <em>Jobs to Close</em> or similar.</li>
           <li>Copy the generated key and paste it into <strong>CallRail API key</strong>.</li>
         </Steps>
         <p className="mt-3 font-semibold">(Optional) Form ID:</p>
         <p>
-          A short label like <code className="rounded bg-ink-100 px-1">rjl-chat-leads</code> that
+          A short label like <code className="rounded bg-ink-100 px-1">jobs-to-close-leads</code> that
           groups chatbot submissions under one form name in CallRail&apos;s UI. Skip if you
           don&apos;t need to filter chat-only submissions.
         </p>
@@ -205,7 +205,7 @@ export default function NotificationsHelp() {
           For Slack/webhooks specifically, you can also test the URL directly with curl:
         </p>
         <pre className="mt-2 overflow-x-auto rounded bg-ink-900 p-3 text-xs text-ink-100">{`curl -X POST -H 'Content-Type: application/json' \\
-  --data '{"text":"Test from RJL-Chat 🟢"}' \\
+  --data '{"text":"Test from Jobs to Close 🟢"}' \\
   https://hooks.slack.com/services/...`}</pre>
       </Section>
     </article>

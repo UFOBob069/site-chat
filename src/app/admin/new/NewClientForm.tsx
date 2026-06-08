@@ -58,7 +58,7 @@ export default function NewClientForm() {
         <label className="label">Business name</label>
         <input
           className="input"
-          placeholder="Ramos James Law"
+          placeholder="Jobs to Close"
           value={form.name}
           onChange={(e) => set("name", e.target.value)}
           required
