@@ -100,6 +100,7 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
     startTransition(async () => {
       const payload = {
         ...form,
+        introVideoEnabled: Boolean(form.introVideoUrl.trim() || form.introVideoUrlEs.trim()),
         bubbleTooltipBgColor: form.bubbleTooltipBgColor || null,
         bubbleTooltipTextColor: form.bubbleTooltipTextColor || null,
         secondWelcomeBgColor: form.secondWelcomeBgColor || null,
@@ -390,19 +391,9 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
 
         <Section
           title="Intro video"
-          subtitle="Plays at the top of the chat panel as soon as it opens — great for a personal greeting."
+          subtitle="Add a video URL to show a personal greeting whenever the chat panel opens. Use the load setting above to choose whether it plays immediately or after the visitor clicks the avatar."
         >
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={form.introVideoEnabled}
-              onChange={(e) => set("introVideoEnabled", e.target.checked)}
-              className="h-4 w-4 rounded border-ink-300"
-            />
-            <span className="text-sm">Show an intro video when the chat opens</span>
-          </label>
-          {form.introVideoEnabled && (
-            <div className="mt-4 space-y-4">
+          <div className="space-y-4">
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -504,7 +495,6 @@ export default function SettingsForm({ clientId, initial }: { clientId: string; 
               )}
               </div>
             </div>
-          )}
         </Section>
 
         <Section

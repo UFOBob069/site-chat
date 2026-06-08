@@ -897,7 +897,6 @@
         // and an intro video is configured — gives a hint without doubling up.
         if (
           !isVideoUrl(imgUrl) &&
-          config.widget.introVideoEnabled &&
           introVideoUrl()
         ) {
           avatar.appendChild(el("span", { className: "play" }, ["▶"]));
@@ -1110,7 +1109,7 @@
     }
 
     function maybeRenderIntroVideo() {
-      if (!config.widget.introVideoEnabled || !introVideoUrl()) return;
+      if (!introVideoUrl()) return;
       var style = config.widget.introVideoStyle || "top";
 
       if (style === "background") {
@@ -1162,7 +1161,7 @@
     }
 
     function maybeSwapIntroVideoForLocale() {
-      if (!config.widget.introVideoEnabled || !introBgEl) return;
+      if (!introBgEl) return;
       var newUrl = introVideoUrl();
       if (!newUrl) return;
       // Find the current video / iframe source URL.
