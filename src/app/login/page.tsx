@@ -1,24 +1,57 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signInWithPopup } from "firebase/auth";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
+import { firebaseAuth, googleProvider } from "@/lib/firebase-client";
 
 function LoginInner() {
   const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl") || "/admin";
+  const rawCallbackUrl = params.get("callbackUrl") || "/admin";
+  const callbackUrl =
+    rawCallbackUrl.startsWith("/") && !rawCallbackUrl.startsWith("//")
+      ? rawCallbackUrl
+      : "/admin";
   const error = params.get("error");
+  const [status, setStatus] = useState<"idle" | "loading">("idle");
+  const [clientError, setClientError] = useState<string | null>(null);
 
-  // NextAuth surfaces `?error=AccessDenied` when our signIn callback
-  // rejects an account (wrong email domain, unverified address, etc.).
-  // The other error codes ("Configuration", "Verification", …) get a
-  // generic message — we don't need to leak detail to a stranger.
   const errorMessage =
-    error === "AccessDenied"
-      ? "That account isn't allowed. Sign in with your @ramosjames.com email."
+    clientError ||
+    (error === "AccessDenied"
+      ? "That account isn't allowed. Sign in with an approved Google account."
       : error
         ? "Sign-in failed. Please try again."
-        : null;
+        : null);
+
+  async function handleGoogleSignIn() {
+    setStatus("loading");
+    setClientError(null);
+    try {
+      const credential = await signInWithPopup(firebaseAuth, googleProvider);
+      const idToken = await credential.user.getIdToken();
+      const res = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!res.ok) {
+        setClientError(
+          res.status === 403
+            ? "That account isn't allowed. Sign in with an approved Google account."
+            : "Sign-in failed. Please try again.",
+        );
+        return;
+      }
+
+      window.location.href = callbackUrl;
+    } catch {
+      setClientError("Google sign-in was cancelled or failed. Please try again.");
+    } finally {
+      setStatus("idle");
+    }
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink-100/60 px-4">
@@ -31,7 +64,7 @@ function LoginInner() {
         </div>
         <h1 className="text-lg font-semibold">Sign in</h1>
         <p className="mt-1 text-sm text-ink-500">
-          Use your Ramos James Google account to access the admin panel.
+          Use your approved Google account to access the admin panel.
         </p>
 
         {errorMessage ? (
@@ -42,8 +75,9 @@ function LoginInner() {
 
         <button
           type="button"
-          onClick={() => signIn("google", { callbackUrl })}
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md border border-ink-300 bg-white px-4 py-2.5 text-sm font-medium text-ink-700 shadow-sm hover:bg-ink-100"
+          onClick={handleGoogleSignIn}
+          disabled={status === "loading"}
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md border border-ink-300 bg-white px-4 py-2.5 text-sm font-medium text-ink-700 shadow-sm hover:bg-ink-100 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <svg viewBox="0 0 48 48" className="h-5 w-5" aria-hidden>
             <path
@@ -63,7 +97,7 @@ function LoginInner() {
               d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.4 5.6l6.5 5.5C40.6 36.5 44 30.8 44 24c0-1.3-.1-2.4-.4-3.5z"
             />
           </svg>
-          Continue with Google
+          {status === "loading" ? "Signing in..." : "Continue with Google"}
         </button>
       </div>
     </div>
@@ -71,7 +105,6 @@ function LoginInner() {
 }
 
 export default function LoginPage() {
-  // useSearchParams needs a Suspense boundary in the App Router.
   return (
     <Suspense fallback={null}>
       <LoginInner />

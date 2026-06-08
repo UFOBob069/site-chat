@@ -3,7 +3,7 @@
 Multi-tenant embeddable chat intake widget + admin built for Ramos James Law and any
 additional businesses managed from the same dashboard.
 
-**Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Prisma · PostgreSQL · Zod.
+**Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Prisma · PostgreSQL · Firebase Auth · Zod.
 Railway-ready.
 
 ---
@@ -33,8 +33,8 @@ Railway-ready.
 - **Prisma schema** in `prisma/schema.prisma` with an initial SQL migration.
 - **Seed** in `prisma/seed.ts` creates **Ramos James Law** and **Trucking Chicas**.
 
-The schema is multi-tenant by row (`clientId` on every table); the admin UI is now a true
-multi-tenant dashboard. Add real auth before exposing the admin publicly.
+The schema is multi-tenant by row (`clientId` on every table); the admin UI is protected
+by Firebase Google sign-in and an allowlisted email domain.
 
 ---
 
@@ -97,9 +97,26 @@ Two ways:
 1. Project → New → Database → Add **PostgreSQL**.
 2. Site-chat service → **Variables** → reference `Postgres.DATABASE_URL`, and add
    `NEXT_PUBLIC_APP_URL=https://your-railway-domain` (no trailing slash).
-3. `railway.json` / `nixpacks.toml` handle the build (`npm run build`) and the start
+3. Create a Firebase project, enable **Authentication → Sign-in method → Google**, and add
+   your Railway domain to **Authentication → Settings → Authorized domains**.
+4. Add the Firebase web app values and service account values to the Site-chat service
+   variables:
+
+   ```env
+   NEXT_PUBLIC_FIREBASE_API_KEY=...
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+   NEXT_PUBLIC_FIREBASE_APP_ID=...
+   FIREBASE_PROJECT_ID=...
+   FIREBASE_CLIENT_EMAIL=...
+   FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+   AUTH_SESSION_SECRET=...
+   AUTH_ALLOWED_EMAIL_DOMAIN=ramosjames.com
+   ```
+
+5. `railway.json` / `nixpacks.toml` handle the build (`npm run build`) and the start
    (`npx prisma migrate deploy && npm run start`).
-4. After first deploy run the seed once via the Railway CLI (`railway run npm run db:seed`)
+6. After first deploy run the seed once via the Railway CLI (`railway run npm run db:seed`)
    or the start-command trick described in the README history.
 
 ---
@@ -127,7 +144,6 @@ from Cloudflare R2, S3, Supabase Storage, YouTube/Vimeo, etc.
 
 ## Next steps
 
-- Real admin auth (NextAuth, Clerk, or simple password gate using `ADMIN_PASSWORD`).
 - Per-user → per-client membership table (so different staff can be scoped to one or many
   businesses).
 - Background job/queue for slow integrations and AI enrichment.
