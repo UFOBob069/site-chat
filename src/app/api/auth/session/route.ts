@@ -9,7 +9,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED_DOMAIN = (process.env.AUTH_ALLOWED_EMAIL_DOMAIN || "ramosjames.com")
+const ALLOWED_EMAILS = (process.env.AUTH_ALLOWED_EMAILS || "david.eagan@gmail.com")
+  .split(",")
+  .map((email) => email.trim().toLowerCase())
+  .filter(Boolean);
+const ALLOWED_DOMAIN = (process.env.AUTH_ALLOWED_EMAIL_DOMAIN || "")
   .toLowerCase()
   .replace(/^@/, "");
 
@@ -36,7 +40,10 @@ export async function POST(req: Request) {
   const verified = decoded.email_verified === true;
   const domain = email.split("@")[1] || "";
 
-  if (!email || !verified || domain !== ALLOWED_DOMAIN) {
+  const emailAllowed = ALLOWED_EMAILS.includes(email);
+  const domainAllowed = Boolean(ALLOWED_DOMAIN) && domain === ALLOWED_DOMAIN;
+
+  if (!email || !verified || (!emailAllowed && !domainAllowed)) {
     return NextResponse.json({ error: "access_denied" }, { status: 403 });
   }
 

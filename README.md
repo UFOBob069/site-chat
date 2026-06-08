@@ -34,7 +34,7 @@ Railway-ready.
 - **Seed** in `prisma/seed.ts` creates **Ramos James Law** and **Trucking Chicas**.
 
 The schema is multi-tenant by row (`clientId` on every table); the admin UI is protected
-by Firebase Google sign-in and an allowlisted email domain.
+by Firebase Google sign-in and allowlisted admin emails.
 
 ---
 
@@ -111,7 +111,8 @@ Two ways:
    FIREBASE_CLIENT_EMAIL=...
    FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
    AUTH_SESSION_SECRET=...
-   AUTH_ALLOWED_EMAIL_DOMAIN=ramosjames.com
+   AUTH_ALLOWED_EMAILS=david.eagan@gmail.com
+   AUTH_ALLOWED_EMAIL_DOMAIN=
    ```
 
 5. `railway.json` / `nixpacks.toml` handle the build (`npm run build`) and the start
