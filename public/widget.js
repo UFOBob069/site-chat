@@ -23,6 +23,9 @@
     console.warn("[RJL-Chat] Missing data-client-id attribute on script tag.");
     return;
   }
+  var isPreviewMode =
+    currentScript.hasAttribute("data-rjl-chat-demo") ||
+    currentScript.hasAttribute("data-rjl-chat-preview");
   var scriptOrigin = (function () {
     try { return new URL(currentScript.src).origin; } catch (e) { return ""; }
   })();
@@ -1557,7 +1560,10 @@
 
     function askNext() {
       updateProgress();
-      if (stepIndex >= steps.length) return submit();
+      if (stepIndex >= steps.length) {
+        if (config.previewMode) return renderPreviewEmptyFlow();
+        return submit();
+      }
 
       var step = steps[stepIndex];
       var mediaAllowed = !config.features || config.features.enableMedia !== false;
@@ -1587,6 +1593,17 @@
         inBodyOptionsEl.parentNode.removeChild(inBodyOptionsEl);
       }
       inBodyOptionsEl = null;
+    }
+
+    function renderPreviewEmptyFlow() {
+      clearFooter();
+      if (progressBar) progressBar.style.width = "100%";
+      addMsg(
+        "bot",
+        currentLocale === "es"
+          ? "Esta vista previa ya puede mostrar el avatar y el video, pero el flujo todavia no tiene preguntas. Agrega pasos en Flow builder para empezar a captar leads."
+          : "This preview can show the avatar and intro video, but the chat flow does not have any questions yet. Add steps in the Flow builder to start collecting leads."
+      );
     }
 
     function accept(step, value, displayText) {
@@ -2105,7 +2122,11 @@
     fetchJson(apiUrl("/api/widget-config?clientId=" + encodeURIComponent(clientId)))
       .then(function (cfg) {
         if (!cfg || !cfg.active) return;
-        if (!cfg.flow || cfg.flow.length === 0) return;
+        if (!cfg.flow || cfg.flow.length === 0) {
+          if (!isPreviewMode) return;
+          cfg.flow = [];
+          cfg.previewMode = true;
+        }
         ChatWidget(cfg);
       })
       .catch(function (err) {
